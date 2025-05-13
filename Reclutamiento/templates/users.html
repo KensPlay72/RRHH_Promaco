@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+  Usuarios
+{% endblock %}
+{% load i18n %}
+{% block content %}
+{% include 'menu.html' %}
+
+{% include 'cerrarsesion.html' %}
+
+  <div class="encabezado">
+    <form action="{% url 'users' %}" method="GET">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text"><ion-icon name="search-outline" style="font-size: 25px"></ion-icon></span>
+        </div>
+        <input type="text" class="form-control" placeholder="Buscar" name="search" value="{{ search }}" autocomplete="off" />
+      </div>
+    </form>
+    <h1 class="titulo-encabezado">Usuarios</h1>
+    {% if perms.auth.add_user %}
+    <button type="button" class="btn btn classbotones" data-bs-toggle="modal" data-bs-target="#modalregistro">Registrar Usuario</button>
+    {% endif %}
+  </div>
+  <div class="tabla">
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Username</th>
+                <th>Correo</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for usuario in usuarios %}
+            <tr>
+                <td>{{ usuario.id }}</td>
+                <td>{{ usuario.first_name }}</td>
+                <td>{{ usuario.last_name }}</td>
+                <td>{{ usuario.username }}</td>
+                <td>{{ usuario.email }}</td>
+                <td>
+                    {% if usuario.is_active %}
+                        <span style="color:green"><b>ACTIVO</b></span>
+                    {% else %}
+                        <span style="color:red"><b>INACTIVO</b></span>
+                    {% endif %}
+                <td>
+                    {% if perms.auth.change_user %}
+                    <button type="button" class="btn btn classbotones" data-bs-toggle="modal" data-bs-target="#modaleditar"
+                    data-id="{{ usuario.id }}" onclick="cargarDatosUsuario(this)">
+                    <ion-icon name="create-outline" class="icon"></ion-icon>
+                    </button>   
+                    {% endif %}   
+                    {% if perms.auth.res_password %}          
+                    <button type="button" class="btn btn-success" onclick="restablecer({{ usuario.id }})">
+                        <ion-icon name="refresh-outline" class="icon"></ion-icon>
+                    </button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+   
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if usuarios.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ usuarios.previous_page_number }}&search={{ search }}&estado={{ estado }}">Anterior</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Anterior</span>
+                </li>
+            {% endif %}
+        
+            {% for num in page_range %}
+                {% if usuarios.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}&search={{ search }}&estado={{ estado }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        
+            {% if usuarios.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ usuarios.next_page_number }}&search={{ search }}&estado={{ estado }}">Siguiente</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Siguiente</span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>    
+    
+</div>
+
+<!-- Modal Registro -->
+<div class="modal fade" id="modalregistro" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Registrar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="register-form-user">
+                    <div class="form-group">
+                        <label for="Nombre">Nombre del Usuario</label>
+                        <input type="text" name="nombreusuario" id="nombreusuario" class="form-control" placeholder="Nombre de usuario" required />
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="Apellido">Apellido del Usuario</label>
+                        <input type="text" name="apellidousuario" id="apellidousuario" class="form-control" placeholder="Nombre de usuario" required />
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="username">DNI del Usuario</label>
+                        <input type="text" name="username" id="username" class="form-control" placeholder="DNI" required maxlength="13" pattern="\d{13}"
+                        title="El número de identidad debe tener exactamente 13 dígitos" oninput="validateNumber(this)" required />
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="">Contraseña</label>
+                        <input type="text" name="password" id="password" value="12345678" disabled class="form-control" placeholder="Contraseña" required />
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="estado">Estado</label>
+                        <select class="form-control" name="estado" id="estado" required>
+                            <option value="true">ACTIVO</option>
+                            <option value="false">INACTIVO</option>
+                        </select>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="email">Correo del Usuario</label>
+                        <input type="email" name="email" id="email" class="form-control" placeholder="Correo de usuario" />
+                    </div>
+                    <br>
+                    <label>Selecciona Módulos:</label><br>
+                    {% for modelo, permisos in permisos_agrupados.items %}
+                        <input type="checkbox" id="modulo_{{ forloop.counter }}" name="modulos" value="{{ permisos|join:',' }}" onclick="togglePermissions(this)">
+                        <label for="modulo_{{ forloop.counter }}" style="cursor: pointer;">
+                            {{ modelo|capfirst }}
+                        </label><br>
+                    {% endfor %}
+                    <br>
+                    
+                    <script>
+                        // Esta función cambia el estado del checkbox al hacer clic en el nombre del módulo
+                        function togglePermissions(checkbox) {
+                            checkbox.checked = !checkbox.checked;
+                        }
+                    </script>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn classbotones">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edición -->
+<div class="modal fade" id="modaleditar" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Usuario</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="update-form-user">
+                    <div class="form-group">
+                        <label for="id_user_editar">ID</label>
+                        <input type="text" name="id_user_editar" id="id_user_editar" class="form-control" disabled />
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="nombreusuario_update">Nombre del Usuario</label>
+                        <input type="text" id="nombreusuario_update" class="form-control" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="apellidousuario_update">Apellido del Usuario</label>
+                        <input type="text" id="apellidousuario_update" class="form-control" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="username_update">DNI del Usuario</label>
+                        <input type="text" id="username_update" class="form-control" maxlength="13" pattern="\d{13}" required>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="estado_update">Estado</label>
+                        <select id="estado_update" class="form-control" required>
+                            <option value="true">ACTIVO</option>
+                            <option value="false">INACTIVO</option>
+                        </select>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                        <label for="email_update">Correo del Usuario</label>
+                        <input type="email" id="email_update" class="form-control">
+                    </div>
+                    <br>
+                    <label>Selecciona Módulos:</label><br>
+                    {% for grupo, permisos in permisos_agrupados.items %}
+                        <input type="checkbox" name="modulos_update" id="modulo_{{ grupo }}" value="{{ permisos|join:',' }}" onclick="togglePermissions(this)">
+                        <label for="modulo_{{ grupo }}" style="cursor: pointer;">
+                            {{ grupo|capfirst }}
+                        </label><br>
+                    {% endfor %}
+                    <br>
+                    
+                    <script>
+                        function togglePermissions(checkbox) {
+                            checkbox.checked = !checkbox.checked;
+                        }
+                    </script>
+                                      
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="submit" class="btn btn classbotones">Guardar Cambios</button>
+                    </div>
+                </form>   
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/usuarios.js' %}"></script>
+{% endblock %}

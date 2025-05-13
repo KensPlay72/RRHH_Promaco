@@ -1,0 +1,17 @@
+<div class="dropdown">
+  <button class="dropbtn" style="display: flex; align-items: center;">
+      <i class="fas fa-user" style="margin-right: 5px;"></i>
+      <span style="margin: 0 10px;">|</span>
+      {{ request.user.username }} 
+      <span style="margin: 0 10px;">|</span>
+      {% if request.user.first_name %}
+          {{ request.user.first_name }} 
+      {% endif %}
+      <span style="margin: 0 10px;">|</span>
+      <span class="glow"></span>
+      <i class="fas fa-chevron-down" style="margin-left: 10px;"></i>
+  </button>
+  <div class="dropdown-content">
+      <a href="{% url 'logout' %}">Cerrar Sesión</a>
+  </div>
+</div>
