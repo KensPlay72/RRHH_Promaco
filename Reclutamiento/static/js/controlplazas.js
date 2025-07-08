@@ -1,12 +1,3 @@
-function calculateAge() {
-    const dobInput = document.getElementById('fechanacimiento').value;
-    if (!dobInput) return;
-    const dob = moment(dobInput);
-    const now = moment.tz('America/Tegucigalpa');
-    const age = now.diff(dob, 'years');
-    document.getElementById('edad').value = age;
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     var rows = document.querySelectorAll('table.styled-table tbody tr');
 
@@ -88,7 +79,6 @@ document.getElementById('register-form-plazas').addEventListener('submit', funct
 
     // Añadir otros campos al FormData
     formData.append('data', JSON.stringify({
-        analistas: getValue('analista'),
         sucursal: getValue('sucursal'),
         empresa: getValue('empresa'),
         unidad_de_negocio: getValue('unidadnegocio'),
@@ -109,7 +99,6 @@ document.getElementById('register-form-plazas').addEventListener('submit', funct
         nombre_contratado: getValue('nombrecontratado'),
         dni: getValue('dni'),
         genero: getValue('genero'),
-        edad: getValue('edad'),
         fecha_nacimiento: getValue('fechanacimiento'),
         medio_reclutamiento: getValue('medioreclutamiento'),
         salario: getValue('salario'),  // Mantener como null si está vacío
@@ -242,7 +231,6 @@ document.getElementById('update-form-plazas').addEventListener('submit', functio
         nombre_contratado: document.getElementById('nombrecontratadoeditar').value.trim() || null,
         dni: document.getElementById('dnieditar').value.trim() || null,
         genero: document.getElementById('generoeditar').value.trim() || null,
-        edad: document.getElementById('edadeditar').value.trim() || null,
         fecha_nacimiento: document.getElementById('fechanacimientoeditar').value.trim() || null,
         medio_reclutamiento: document.getElementById('medioreclutamientoeditar').value.trim() || null,
         salario: document.getElementById('salarioeditar').value.trim() || null,
@@ -454,7 +442,6 @@ fetch(`?control_plaza_id=${control_plaza_id}`)
         document.getElementById('ideditar').value = datos.id;
 
         // Asignar los IDs de las relaciones
-        document.getElementById('analistaeditar').value = datos.analista;  
         document.getElementById('sucursaleditar').value = datos.sucursal;  
         document.getElementById('empresaeditar').value = datos.empresa;  
         document.getElementById('unidadnegocioeditar').value = datos.unidad_negocio;  
@@ -475,7 +462,6 @@ fetch(`?control_plaza_id=${control_plaza_id}`)
         document.getElementById('nombrecontratadoeditar').value = datos.nombre_contratado;
         document.getElementById('dnieditar').value = datos.dni;
         document.getElementById('generoeditar').value = datos.genero;
-        document.getElementById('edadeditar').value = datos.edad;
         document.getElementById('fechanacimientoeditar').value = datos.fecha_nacimiento;
         document.getElementById('medioreclutamientoeditar').value = datos.medio_reclutamiento;  
         document.getElementById('salarioeditar').value = datos.salario;
@@ -501,7 +487,7 @@ function mostrarDetallesControlPlazas(boton) {
     function setInnerText(id, value) {
         var element = document.getElementById(id);
         if (element) {
-            element.innerText = value || 'N/A';  // Establecer 'N/A' si el valor es null o undefined
+            element.innerText = value || 'N/A';  
         } else {
             console.warn(`Elemento con ID ${id} no encontrado.`);
         }
@@ -509,6 +495,7 @@ function mostrarDetallesControlPlazas(boton) {
 
     // Asignar los valores al modal
     setInnerText('detalles-id', datosControlPlaza.id);
+    setInnerText('detalles-usuario', datosControlPlaza.usuario_creo_nombre);
     setInnerText('detalles-sucursal', datosControlPlaza.sucursal_nombre);
     setInnerText('detalles-empresa', datosControlPlaza.empresa_nombre);
     setInnerText('detalles-unidad-negocio', datosControlPlaza.unidad_negocio_nombre);
@@ -529,7 +516,6 @@ function mostrarDetallesControlPlazas(boton) {
     setInnerText('detalles-nombre-contratado', datosControlPlaza.nombre_contratado);
     setInnerText('detalles-dni', datosControlPlaza.dni);
     setInnerText('detalles-genero', datosControlPlaza.genero);
-    setInnerText('detalles-edad', datosControlPlaza.edad);
     setInnerText('detalles-fecha-nacimiento', datosControlPlaza.fecha_nacimiento);
     setInnerText('detalles-medio-reclutamiento', datosControlPlaza.medio_reclutamiento_nombre);
     setInnerText('detalles-salario', datosControlPlaza.salario);

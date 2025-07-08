@@ -105,25 +105,6 @@ function validateNumber(input) {
       });
     }
   });
-  
-
-function calculateAge() {
-    const dobInput = document.getElementById('fechanacimiento').value;
-    if (!dobInput) return;
-    const dob = moment(dobInput);
-    const now = moment.tz('America/Tegucigalpa');
-    const age = now.diff(dob, 'years');
-    document.getElementById('edad').value = age;
-}
-function calculateAgeedit() {
-    const dobInput = document.getElementById('fechanacimientoeditar').value;
-    if (!dobInput) return;
-    const dob = moment(dobInput);
-    const now = moment.tz('America/Tegucigalpa');
-    const age = now.diff(dob, 'years');
-    document.getElementById('edadeditar').value = age;
-}
-
 
 document.getElementById('register-form-bolsaempleo').addEventListener('submit', function(event) {
     event.preventDefault();
@@ -193,7 +174,6 @@ document.getElementById('register-form-bolsaempleo').addEventListener('submit', 
         estado: estado,  // Añadido estado como obligatorio
         ciudad: document.getElementById('ciudad').value || null, 
         mediosReclutamiento: document.getElementById('mediosReclutamiento').value || null, 
-        edad: document.getElementById('edad').value || null, 
         fechanacimiento: fechaNacimiento || null, 
         estadocivil: document.getElementById('estadocivil').value || null, 
         nhijos: document.getElementById('nhijos').value.trim() || null, 
@@ -264,13 +244,12 @@ document.getElementById('update-form-bolsaempleo').addEventListener('submit', fu
         dni: document.getElementById('dnieditar').value.trim(),
         nombre_candidato: document.getElementById('nombre_candidatoeditar').value.trim(),
         puestoaspira: Array.from(document.querySelectorAll('input[name="puestoaspiraeditar[]"]:checked')).map(el => el.value),
-        puestoaplica: Array.from(document.querySelectorAll('input[name="puestoaplica[]"]:checked')).map(el => el.value) || [],
+        puestoaplica: Array.from(document.querySelectorAll('input[name="puestoaplica[]"]:checked')).map(el => el.value),
         telefono: document.getElementById('telefonoeditar').value.trim(),
         telefono2: document.getElementById('telefono2editar').value.trim() || null,
         estado: document.getElementById('estadoeditar').value || null,
         ciudad: document.getElementById('ciudadeditar').value || null,
         mediosReclutamiento: document.getElementById('mediosReclutamientoeditar').value || null,
-        edad: document.getElementById('edadeditar').value || null,
         fechanacimiento: document.getElementById('fechanacimientoeditar').value || null,
         estadocivil: document.getElementById('estadocivileditar').value || null,
         nhijos: document.getElementById('nhijoseditar').value.trim() || null,
@@ -280,32 +259,25 @@ document.getElementById('update-form-bolsaempleo').addEventListener('submit', fu
         mediomovilizacion: document.getElementById('mediomovilizacioneditar').value || null
     };
 
-    // Validar campos obligatorios
     if (!data.nombre_candidato || !data.telefono || data.puestoaspira.length === 0 || !data.estado) {
         Swal.fire({
             title: 'Error',
             text: 'Por favor, completa todos los campos obligatorios.',
             icon: 'warning',
             confirmButtonText: 'Aceptar',
-            customClass: {
-                confirmButton: 'custom-alertas-button'
-            }
+            customClass: { confirmButton: 'custom-alertas-button' }
         });
         return;
     }
 
-    const archivo = document.getElementById('cveditar').files[0]; // Archivo seleccionado, si existe
-
-    // Validar que el archivo subido sea PDF si se selecciona uno
+    const archivo = document.getElementById('cveditar').files[0];
     if (archivo && archivo.type !== 'application/pdf') {
         Swal.fire({
             title: 'Error',
             text: 'El archivo debe ser un documento PDF.',
             icon: 'warning',
             confirmButtonText: 'Aceptar',
-            customClass: {
-                confirmButton: 'custom-alertas-button'
-            }
+            customClass: { confirmButton: 'custom-alertas-button' }
         });
         return;
     }
@@ -313,59 +285,47 @@ document.getElementById('update-form-bolsaempleo').addEventListener('submit', fu
     const formData = new FormData();
     formData.append('data', JSON.stringify(data));
     if (archivo) {
-        formData.append('cveditar', archivo); // Añadir archivo PDF si existe
+        formData.append('cveditar', archivo);
     }
 
-    fetch(`/BolsaEmpleo/UpdatePOST/${data.id}/`, { // Cambia a la nueva URL
-        method: 'POST', // Utiliza el método POST en lugar de PUT
-        headers: {
-            'X-CSRFToken': getCookie('csrftoken') // Asegúrate de que el token esté disponible
-        },
+    fetch(`/BolsaEmpleo/UpdatePOST/${data.id}/`, {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCookie('csrftoken') },
         body: formData
     })
     .then(response => {
         if (!response.ok) {
-            return response.json().then(errData => {
-                throw new Error(errData.message || 'Error al actualizar el candidato');
-            });
+            return response.json().then(err => { throw new Error(err.message); });
         }
         return response.json();
     })
-    .then(data => {
-        if (!data.success) {
-            Swal.fire({
-                title: 'Error',
-                text: data.message,
-                icon: 'warning',
-                confirmButtonText: 'Aceptar',
-                customClass: {
-                    confirmButton: 'custom-alertas-button'
-                }
-            });
-        } else {
+    .then(result => {
+        if (result.success) {
             Swal.fire({
                 title: 'Éxito',
-                text: 'Candidato actualizado exitosamente.',
+                text: result.message,
                 icon: 'success',
                 confirmButtonText: 'Aceptar',
-                customClass: {
-                    confirmButton: 'custom-alertas-button'
-                }
-            }).then(() => {
-                location.reload(); // Recargar la página después de actualizar exitosamente
+                customClass: { confirmButton: 'custom-alertas-button' }
+            }).then(() => location.reload());
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: result.message,
+                icon: 'error',
+                confirmButtonText: 'Aceptar',
+                customClass: { confirmButton: 'custom-alertas-button' }
             });
         }
     })
     .catch(error => {
-        console.error('Error en la solicitud:', error); // Imprimir el error
+        console.error('Error:', error);
         Swal.fire({
             title: 'Error',
-            text: error.message || 'Hubo un problema al actualizar al candidato.',
+            text: error.message || 'Ocurrió un error inesperado.',
             icon: 'error',
             confirmButtonText: 'Aceptar',
-            customClass: {
-                confirmButton: 'custom-alertas-button'
-            }
+            customClass: { confirmButton: 'custom-alertas-button' }
         });
     });
 });
@@ -389,52 +349,44 @@ function getCookie(name) {
 function llenarFormularioEditar(boton) {
     var bolsaEmpleosData = JSON.parse(document.getElementById('bolsaempleos-data').textContent);
     var idCandidato = boton.getAttribute('data-editar');
-    var candidatoSeleccionado = bolsaEmpleosData.find(candidato => candidato.id == idCandidato);
+    var candidato = bolsaEmpleosData.find(c => c.id == idCandidato);
 
-    if (candidatoSeleccionado) {
-        // Llenar el formulario con los datos del candidato seleccionado
-        document.getElementById('ideditar').value = candidatoSeleccionado.id || '';
-        document.getElementById('dnieditar').value = candidatoSeleccionado.dni || '';
-        document.getElementById('nombre_candidatoeditar').value = candidatoSeleccionado.nombre_candidato || '';
-        document.getElementById('telefonoeditar').value = candidatoSeleccionado.telefono || '';
-        document.getElementById('telefono2editar').value = candidatoSeleccionado.telefono2 || '';
-        document.getElementById('estadoeditar').value = candidatoSeleccionado.estado || '';
-        document.getElementById('ciudadeditar').value = candidatoSeleccionado.ciudad || '';
-        document.getElementById('mediosReclutamientoeditar').value = candidatoSeleccionado.medio_reclutamiento || '';
-        document.getElementById('edadeditar').value = candidatoSeleccionado.edad || '';
-        document.getElementById('fechanacimientoeditar').value = candidatoSeleccionado.fecha_nacimiento || '';
-        document.getElementById('estadocivileditar').value = candidatoSeleccionado.estadocivil || '';
-        document.getElementById('nhijoseditar').value = (candidatoSeleccionado.nhijos === "None" ? '' : candidatoSeleccionado.nhijos) || '';
-        document.getElementById('direccioneditar').value = candidatoSeleccionado.direccion || '';
-        document.getElementById('experienciaeditar').value = candidatoSeleccionado.experiencia || '';
-        document.getElementById('observacioneditar').value = candidatoSeleccionado.observacion || '';
-        document.getElementById('mediomovilizacioneditar').value = candidatoSeleccionado.mediomovilizacion || '';
-
-        // Manejo de puestos aspira
-        var puestosAspiraRaw = candidatoSeleccionado.puestosaspira || "[]";
-        var puestosAspiraIds = (puestosAspiraRaw === "None" ? [] : JSON.parse(puestosAspiraRaw.replace(/'/g, '"')).map(Number));
-
-        var checkboxesAspira = document.querySelectorAll('#options-puestos-aspira-editar input[type="checkbox"]');
-        checkboxesAspira.forEach(checkbox => {
-            var checkboxValue = parseInt(checkbox.value);
-            checkbox.checked = puestosAspiraIds.includes(checkboxValue);
-        });
-        updateSelectedText('#select-puestos-aspira-editar', checkboxesAspira);
-
-        // Manejo de puestos aplica
-        var puestosAplicaRaw = candidatoSeleccionado.puestosaplica || "[]";
-        var puestosAplicaIds = (puestosAplicaRaw === "None" ? [] : JSON.parse(puestosAplicaRaw.replace(/'/g, '"')).map(Number));
-
-        var checkboxesAplica = document.querySelectorAll('#options-puestos-aplica input[type="checkbox"]');
-        checkboxesAplica.forEach(checkbox => {
-            var checkboxValue = parseInt(checkbox.value);
-            checkbox.checked = puestosAplicaIds.includes(checkboxValue);
-        });
-        updateSelectedText('#select-puestos-aplica', checkboxesAplica);
-
-    } else {
-        console.error("Candidato no encontrado en el JSON");
+    if (!candidato) {
+        console.error("Candidato no encontrado");
+        return;
     }
+
+    document.getElementById('ideditar').value = candidato.id || '';
+    document.getElementById('dnieditar').value = candidato.dni || '';
+    document.getElementById('nombre_candidatoeditar').value = candidato.nombre_candidato || '';
+    document.getElementById('telefonoeditar').value = candidato.telefono || '';
+    document.getElementById('telefono2editar').value = candidato.telefono2 || '';
+    document.getElementById('estadoeditar').value = candidato.estado || '';
+    document.getElementById('ciudadeditar').value = candidato.ciudad || '';
+    document.getElementById('mediosReclutamientoeditar').value = candidato.medio_reclutamiento || '';
+    document.getElementById('fechanacimientoeditar').value = candidato.fecha_nacimiento || '';
+    document.getElementById('estadocivileditar').value = candidato.estadocivil || '';
+    document.getElementById('nhijoseditar').value = (candidato.nhijos === "None" ? '' : candidato.nhijos) || '';
+    document.getElementById('direccioneditar').value = candidato.direccion || '';
+    document.getElementById('mediomovilizacioneditar').value = candidato.mediomovilizacion || '';
+    document.getElementById('experienciaeditar').value = candidato.experiencia || '';
+    document.getElementById('observacioneditar').value = candidato.observacion || '';
+
+    // Checkboxes: puestos aspira
+    var puestosAspiraIds = candidato.puestosaspira || [];
+    var checkboxesAspira = document.querySelectorAll('#options-puestos-aspira-editar input[type="checkbox"]');
+    checkboxesAspira.forEach(checkbox => {
+        checkbox.checked = puestosAspiraIds.includes(parseInt(checkbox.value));
+    });
+    updateSelectedText('#select-puestos-aspira-editar', checkboxesAspira);
+
+    // Checkboxes: puestos aplica
+    var puestosAplicaIds = candidato.puestosaplica || [];
+    var checkboxesAplica = document.querySelectorAll('#options-puestos-aplica input[type="checkbox"]');
+    checkboxesAplica.forEach(checkbox => {
+        checkbox.checked = puestosAplicaIds.includes(parseInt(checkbox.value));
+    });
+    updateSelectedText('#select-puestos-aplica', checkboxesAplica);
 }
 
 // Función para actualizar el texto visible del select personalizado
@@ -560,7 +512,6 @@ function mostrardetalles(boton) {
     setInnerText('detalles-estado', datosBolsa.estado);
     setInnerText('detalles-ciudad', datosBolsa.nombre_ciudad);  // Muestra el nombre de la ciudad
     setInnerText('detalles-medio-reclutamiento', datosBolsa.nombre_medio_reclutamiento);  // Muestra el nombre del medio de reclutamiento
-    setInnerText('detalles-edad', datosBolsa.edad);
     setInnerText('detalles-fecha-nacimiento', datosBolsa.fecha_nacimiento);
     setInnerText('detalles-estadocivil', datosBolsa.estadocivil);
     setInnerText('detalles-nhijos', datosBolsa.nhijos);

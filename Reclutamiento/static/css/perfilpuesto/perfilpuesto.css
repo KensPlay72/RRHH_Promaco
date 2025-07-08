@@ -192,7 +192,6 @@ img{
 .selectpuesto select {
     width: 100%;
     height: 100%; 
-    padding: 0;
     padding: 10px;
     margin: 0; 
     border: none; 
@@ -202,7 +201,7 @@ img{
     -moz-appearance: none; /* Elimina estilo en Firefox */
     background-color: transparent; /* Fondo transparente */
     font-size: inherit; /* Hereda el tamaño de fuente */
-    color: inherit; /* Hereda el color del texto */
+    color: inherit;
 }
 
 .selectpuesto select:focus {
@@ -433,6 +432,54 @@ textarea {
     font-size: 16px;
     color: black;
 }
+
+.custom-checkbox7 {
+    width: 35%; /* Ajusta el ancho para que haya 3 elementos por fila */
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    color: black;
+}
+
+.custom-checkbox7 input[type="checkbox"] {
+    position: absolute;
+    opacity: 0; /* Ocultamos el checkbox original */
+    cursor: pointer;
+}
+
+
+.custom-checkbox7:hover input[type="checkbox"] ~ .checkmark {
+    background-color: #f0f0f0;
+}
+
+.custom-checkbox7 input[type="checkbox"]:checked ~ .checkmark {
+    background-color: #073C64;
+}
+
+.custom-checkbox7 .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.custom-checkbox7 input[type="checkbox"]:checked ~ .checkmark:after {
+    display: block;
+}
+
+.custom-checkbox7 .checkmark:after {
+    left: 6px;
+    top: 2px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
 
 .custom-checkbox input[type="checkbox"] {
     position: absolute;

@@ -74,16 +74,6 @@ urlpatterns = [
     path('PerfilesPuestos/Update/<int:id>/', views.update_perfilpuesto_view, name='update_perfilpuesto'),
     path('PerfilesPuestos/UpdateCompleto/<int:id>/', views.updatecompleto_perfilpuesto_view, name='updatecompleto_perfilpuesto'),
 
-    #----------Requisa----------#
-    path('PerfilesPuestos/Requisa/RegistrarRequisaPerfil/<int:id>/', views.requisaperfil_view, name='pefilrequisa'),
-    path('Requisa/RegistrarRequisa/', views.requisaregistrar_view, name='requisaregistrar'),
-    path('Requisa/', views.requisa_view, name='requisa'),
-    path('Requisa/Update/<int:id>/', views.requisaupdate_view, name='updaterequisa'),
-    path('Requisa/Imprimir/<int:id>/', views.imprimirrequisa_view, name='imprimirrequisa'),
-    path('Requisa/AprobarRequisa/<int:id>/', views.aprobar_requisa_view, name='aprobarrequisa'),
-    path('Requisa/CancelarRequisa/<int:id>/', views.cancelar_requisa_view, name='cancelarrequisa'),
-    path('Requisa/DuplicarRequisa/<int:id>/', views.duplicar_requisa_view, name='duplicarrequisa'),
-
 
     #----------CONTRATACIONES MULTISERVICIOS----------#
     path('Contrataciones_multi/RegistrarContrataciones_Multi', views.contratacionesform_multi_view, name='registrar_contrataciones_multi'),
@@ -103,6 +93,10 @@ urlpatterns = [
     path('Inventario/Telefonos/ImprimirEntrega/<int:id>', views.imprimir_telefono_view, name='imprimirentrega'),
     path('Inventario/Telefonos/Deduccion/', views.deduccion_telefono, name='deduccion_telefono'),
     path('exportar/inventario/telefonos/', views.exportar_inventario_telefonos, name='exportar_inventario_telefonos'),
+
+
+    path('ajax/departamentos/<int:pais_id>/', views.get_departamentos_por_pais, name='get_departamentos_por_pais'),
+    path('ajax/municipios/<int:departamento_id>/', views.get_municipios_por_departamento, name='get_municipios_por_departamento'),
 
 ]
 

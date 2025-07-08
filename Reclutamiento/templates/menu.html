@@ -1,167 +1,162 @@
 <div class="l-navbar" id="navbar">
-  <nav class="nav">
-    <div>
-      <div class="nav__brand">
-        <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
-        <a href="#" class="nav__logo">Promaco S.A</a>
-      </div>
-      <span>Promaco</span>
-      <hr>
-      <div class="nav__list">
-        <a href="{% url 'dashboard' %}" class="nav__link {% if request.path == '/Dashboard/' %}active{% endif %}">
-          <ion-icon name="home-outline" class="nav__icon"></ion-icon>
-          <span class="nav__name">Dashboard</span>
-        </a>
-
-        {% if perms.Reclutamiento.view_controldeplazas %}
-        <a href="{% url 'controlplazas' %}" class="nav__link {% if request.path == '/ControlPlazas/' %}active{% endif %}">
-          <ion-icon name="business-outline" class="nav__icon"></ion-icon>
-          <span class="nav__name">Control de Plazas</span>
-        </a>
-        {% endif %}
-
-        {% if perms.auth.view_user %}
-        <a href="{% url 'users' %}" class="nav__link {% if request.path == '/Usuarios/' %}active{% endif %}">
-          <ion-icon name="person-outline" class="nav__icon"></ion-icon>
-          <span class="nav__name">Usuarios</span>
-        </a>
-        {% endif %}
-
-        {% if perms.Reclutamiento.view_bolsaempleos %}
-        <a href="{% url 'bolsaempleo' %}" class="nav__link {% if request.path == '/BolsaEmpleo/' %}active{% endif %}">
-          <ion-icon name="briefcase-outline" class="nav__icon"></ion-icon>
-          <span class="nav__name">Bolsa de Empleo</span>
-        </a>
-        {% endif %}
-
-        {% if perms.Reclutamiento.view_contratacionempleados %}
-        <a href="{% url 'contrataciones' %}" class="nav__link {% if request.path == '/Contrataciones/' %}active{% endif %}">
-          <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
-          <span class="nav__name">Contrataciones</span>
-        </a>
-        {% endif %}
-
-        {% if perms.Reclutamiento.view_cesantias %}
-        <a href="{% url 'cesantias' %}" class="nav__link {% if request.path == '/Cesantias/' %}active{% endif %}">
-          <ion-icon name="cash-outline" class="nav__icon"></ion-icon>
-          <span class="nav__name">Cesantias</span>
-        </a>
-        {% endif %}
-
-        {% if perms.Reclutamiento.view_perfilespuestos %}
-        <a href="{% url 'perfilpuesto' %}" class="nav__link {% if request.path == '/PerfilesPuestos/' %}active{% endif %}">
-          <ion-icon name="document-text-outline" class="nav__icon"></ion-icon>
-          <span class="nav__name">Perfil de Puesto</span>
-        </a>
-        {% endif %}
-
-
-        {% if perms.Reclutamiento.view_requisa %}
-        <a href="{% url 'requisa' %}" class="nav__link {% if request.path == '/Requisa/' %}active{% endif %}">
-          <ion-icon name="shield-checkmark-outline" class="nav__icon"></ion-icon>
-          <span class="nav__name">Requisas</span>
-        </a>
-        {% endif %}
-
-
-        {% comment %} {% if request.session.has_roles_permission %}
-        <a href="{% url 'consultarroles' %}" class="nav__link">
-          <ion-icon name="calendar-outline" class="nav__icon"></ion-icon>
-          <span class="nav__name">Asistencia</span>
-        </a>
-        {% endif %}
-         {% endcomment %}
-
-
-         {% if perms.Reclutamiento.view_inventariotelefonos %}
-        <a class="nav__link collapse__link {% if '/Inventario/' in request.path %}active{% endif %}">
-          <ion-icon name="arrow-down-outline" class="collapse__icon"></ion-icon>
-          <span class="nav__name">Inventario</span>
-        </a>
-        <div class="collapse__menu">
-          <a href="{% url 'telefonos' %}" class="collapse__sublink {% if request.path == '/Inventario/Telefonos/' %}active{% endif %}">Telefonos</a>
+    <nav class="nav">
+        <div>
+            <div class="nav__brand">
+                <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
+                <a href="#" class="nav__logo">Promaco S.A</a>
+            </div>
+            <span>Promaco</span>
+            <hr>
+            <div class="nav__list">
+                <a href="{% url 'dashboard' %}"
+                   class="nav__link {% if request.path == '/Dashboard/' %}active{% endif %}">
+                    <ion-icon name="home-outline" class="nav__icon"></ion-icon>
+                    <span class="nav__name">Dashboard</span>
+                </a>
+                {% if perms.Reclutamiento.view_controldeplazas %}
+                    <a href="{% url 'controlplazas' %}"
+                       class="nav__link {% if request.path == '/ControlPlazas/' %}active{% endif %}">
+                        <ion-icon name="business-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Control de Plazas</span>
+                    </a>
+                {% endif %}
+                {% if perms.auth.view_user %}
+                    <a href="{% url 'users' %}"
+                       class="nav__link {% if request.path == '/Usuarios/' %}active{% endif %}">
+                        <ion-icon name="person-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Usuarios</span>
+                    </a>
+                {% endif %}
+                {% if perms.Reclutamiento.view_bolsaempleos %}
+                    <a href="{% url 'bolsaempleo' %}"
+                       class="nav__link {% if request.path == '/BolsaEmpleo/' %}active{% endif %}">
+                        <ion-icon name="briefcase-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Bolsa de Empleo</span>
+                    </a>
+                {% endif %}
+                {% if perms.Reclutamiento.view_contratacionempleados %}
+                    <a href="{% url 'contrataciones' %}"
+                       class="nav__link {% if request.path == '/Contrataciones/' %}active{% endif %}">
+                        <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Contrataciones</span>
+                    </a>
+                {% endif %}
+                {% if perms.Reclutamiento.view_cesantias %}
+                    <a href="{% url 'cesantias' %}"
+                       class="nav__link {% if request.path == '/Cesantias/' %}active{% endif %}">
+                        <ion-icon name="cash-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Cesantias</span>
+                    </a>
+                {% endif %}
+                {% if perms.Reclutamiento.view_perfilespuestos %}
+                    <a href="{% url 'perfilpuesto' %}"
+                       class="nav__link {% if request.path == '/PerfilesPuestos/' %}active{% endif %}">
+                        <ion-icon name="document-text-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Perfil de Puesto</span>
+                    </a>
+                {% endif %}
+                {% if perms.Reclutamiento.view_inventariotelefonos %}
+                    <a class="nav__link collapse__link {% if '/Inventario/' in request.path %}active{% endif %}">
+                        <ion-icon name="arrow-down-outline" class="collapse__icon"></ion-icon>
+                        <span class="nav__name">Inventario</span>
+                    </a>
+                    <div class="collapse__menu">
+                        <a href="{% url 'telefonos' %}"
+                           class="collapse__sublink {% if request.path == '/Inventario/Telefonos/' %}active{% endif %}">Telefonos</a>
+                    </div>
+                {% endif %}
+                {% if perms.Reclutamiento.view_jefes or perms.Reclutamiento.view_colaboradores or perms.Reclutamiento.view_sucursal or perms.Reclutamiento.view_empresas or perms.Reclutamiento.view_unidad_negocio or perms.Reclutamiento.view_departamento or perms.Reclutamiento.view_ciudades or perms.Reclutamiento.view_puestos or perms.Reclutamiento.view_prioridad or perms.Reclutamiento.view_modo or perms.Reclutamiento.view_motivo or perms.Reclutamiento.view_medioreclutamiento or perms.Reclutamiento.view_tipocontrato or perms.Reclutamiento.view_spicosmart or perms.Reclutamiento.view_pais or perms.Reclutamiento.view_departamentopais or perms.Reclutamiento.view_municipiopais %}
+                    <a class="nav__link collapse__link {% if '/Listas/' in request.path %}active{% endif %}">
+                        <ion-icon name="chevron-down-outline" class="collapse__icon"></ion-icon>
+                        <span class="nav__name">Listas</span>
+                    </a>
+                {% endif %}
+                <div class="collapse__menu">
+                    {% if perms.Reclutamiento.view_jefes or perms.Reclutamiento.view_colaboradore %}<hr>{% endif %}
+                    {% if perms.Reclutamiento.view_jefes %}
+                        <a href="{% url 'jefes' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Jefes/' %}active{% endif %}">Jefes</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_colaboradores %}
+                        <a href="{% url 'colaboradores' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Colaboradores/' %}active{% endif %}">Colaboradores</a>
+                    {% endif %}
+                    <hr>
+                    {% if perms.Reclutamiento.view_sucursal %}
+                        <a href="{% url 'sucursales' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Sucursales/' %}active{% endif %}">Sucursales</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_empresas %}
+                        <a href="{% url 'empresas' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Empresas/' %}active{% endif %}">Empresas</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_unidad_negocio %}
+                        <a href="{% url 'unidadnegocio' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Unidad_Negocio/' %}active{% endif %}">Unidad de Negocio</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_departamento %}
+                        <a href="{% url 'departamentos' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Departamentos/' %}active{% endif %}">Departamentos</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_ciudades %}
+                        <a href="{% url 'ciudades' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Ciudades/' %}active{% endif %}">Ciudades</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_puestos %}
+                        <a href="{% url 'puestos' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Puestos/' %}active{% endif %}">Puestos</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_prioridad %}
+                        <a href="{% url 'prioridades' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Prioridades/' %}active{% endif %}">Prioridad</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_modo %}
+                        <a href="{% url 'modos' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Modos/' %}active{% endif %}">Modos</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_motivo %}
+                        <a href="{% url 'motivos' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Motivos/' %}active{% endif %}">Motivos</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_medioreclutamiento %}
+                        <a href="{% url 'medios_reclutamiento' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/MediosReclutamiento/' %}active{% endif %}">Medio de Reclutamiento</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_tipocontrato %}
+                        <a href="{% url 'tipo_contrato' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/TipoContrato/' %}active{% endif %}">Tipo de Contrato</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_spicosmart %}
+                        <a href="{% url 'psicosmart' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Psicosmart/' %}active{% endif %}">Psicosmart</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_pais or perms.Reclutamiento.view_departamentopais or perms.Reclutamiento.view_municipiopais %}
+                        <hr>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_pais %}
+                        <a href="{% url 'paises' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/Paises/' %}active{% endif %}">Paises</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_departamentopais %}
+                        <a href="{% url 'departamentospais' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/DepartamentosPais/' %}active{% endif %}">Departamentos</a>
+                    {% endif %}
+                    {% if perms.Reclutamiento.view_municipiopais %}
+                        <a href="{% url 'municipiopais' %}"
+                           class="collapse__sublink {% if request.path == '/Listas/MunicipiosPais/' %}active{% endif %}">Municipios</a>
+                    {% endif %}
+                    <hr>
+                </div>
+                {% if perms.Reclutamiento.view_contratacionempleadosmulti %}
+                    <span>Multiservicio</span>
+                    <hr>
+                    <a href="{% url 'contrataciones_multi' %}"
+                       class="nav__link {% if request.path == '/Contrataciones_multi/' %}active{% endif %}">
+                        <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
+                        <span class="nav__name">Contrataciones</span>
+                    </a>
+                {% endif %}
+            </div>
         </div>
-        {% endif %}
-
-        {% if perms.Reclutamiento.view_jefes or perms.Reclutamiento.view_colaboradores or perms.Reclutamiento.view_sucursal or perms.Reclutamiento.view_empresas or perms.Reclutamiento.view_unidad_negocio or perms.Reclutamiento.view_departamento or perms.Reclutamiento.view_ciudades or perms.Reclutamiento.view_puestos or perms.Reclutamiento.view_prioridad or perms.Reclutamiento.view_modo or perms.Reclutamiento.view_motivo or perms.Reclutamiento.view_medioreclutamiento or perms.Reclutamiento.view_tipocontrato or perms.Reclutamiento.view_spicosmart or perms.Reclutamiento.view_pais or perms.Reclutamiento.view_departamentopais or perms.Reclutamiento.view_municipiopais %}
-      <a class="nav__link collapse__link {% if '/Listas/' in request.path %}active{% endif %}">
-        <ion-icon name="chevron-down-outline" class="collapse__icon"></ion-icon>
-        <span class="nav__name">Listas</span>
-      </a>
-      {% endif %}
-      <div class="collapse__menu">
-        {% if perms.Reclutamiento.view_jefes or perms.Reclutamiento.view_colaboradore %}
-        <hr>
-        {% endif %}
-        {% if perms.Reclutamiento.view_jefes %}
-        <a href="{% url 'jefes' %}" class="collapse__sublink {% if request.path == '/Listas/Jefes/' %}active{% endif %}">Jefes</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_colaboradores %}
-        <a href="{% url 'colaboradores' %}" class="collapse__sublink {% if request.path == '/Listas/Colaboradores/' %}active{% endif %}">Colaboradores</a>
-        {% endif %}
-        <hr>
-        {% if perms.Reclutamiento.view_sucursal %}
-        <a href="{% url 'sucursales' %}" class="collapse__sublink {% if request.path == '/Listas/Sucursales/' %}active{% endif %}">Sucursales</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_empresas %}
-        <a href="{% url 'empresas' %}" class="collapse__sublink {% if request.path == '/Listas/Empresas/' %}active{% endif %}">Empresas</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_unidad_negocio %}
-        <a href="{% url 'unidadnegocio' %}" class="collapse__sublink {% if request.path == '/Listas/Unidad_Negocio/' %}active{% endif %}">Unidad de Negocio</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_departamento %}
-        <a href="{% url 'departamentos' %}" class="collapse__sublink {% if request.path == '/Listas/Departamentos/' %}active{% endif %}">Departamentos</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_ciudades %}
-        <a href="{% url 'ciudades' %}" class="collapse__sublink {% if request.path == '/Listas/Ciudades/' %}active{% endif %}">Ciudades</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_puestos %}
-        <a href="{% url 'puestos' %}" class="collapse__sublink {% if request.path == '/Listas/Puestos/' %}active{% endif %}">Puestos</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_prioridad %}
-        <a href="{% url 'prioridades' %}" class="collapse__sublink {% if request.path == '/Listas/Prioridades/' %}active{% endif %}">Prioridad</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_modo %}
-        <a href="{% url 'modos' %}" class="collapse__sublink {% if request.path == '/Listas/Modos/' %}active{% endif %}">Modos</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_motivo %}
-        <a href="{% url 'motivos' %}" class="collapse__sublink {% if request.path == '/Listas/Motivos/' %}active{% endif %}">Motivos</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_medioreclutamiento %}
-        <a href="{% url 'medios_reclutamiento' %}" class="collapse__sublink {% if request.path == '/Listas/MediosReclutamiento/' %}active{% endif %}">Medio de Reclutamiento</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_tipocontrato %}
-        <a href="{% url 'tipo_contrato' %}" class="collapse__sublink {% if request.path == '/Listas/TipoContrato/' %}active{% endif %}">Tipo de Contrato</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_spicosmart %}
-        <a href="{% url 'psicosmart' %}" class="collapse__sublink {% if request.path == '/Listas/Psicosmart/' %}active{% endif %}">Psicosmart</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_pais or perms.Reclutamiento.view_departamentopais or perms.Reclutamiento.view_municipiopais %}
-        <hr>
-        {% endif %}
-        {% if perms.Reclutamiento.view_pais %}
-        <a href="{% url 'paises' %}" class="collapse__sublink {% if request.path == '/Listas/Paises/' %}active{% endif %}">Paises</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_departamentopais %}
-        <a href="{% url 'departamentospais' %}" class="collapse__sublink {% if request.path == '/Listas/DepartamentosPais/' %}active{% endif %}">Departamentos</a>
-        {% endif %}
-        {% if perms.Reclutamiento.view_municipiopais %}
-        <a href="{% url 'municipiopais' %}" class="collapse__sublink {% if request.path == '/Listas/MunicipiosPais/' %}active{% endif %}">Municipios</a>
-        {% endif %}
-        <hr>
-      </div>
-    
-    
-
-        {% if perms.Reclutamiento.view_contratacionempleadosmulti %}
-        <span>Multiservicio</span>
-        <hr>
-        <a href="{% url 'contrataciones_multi' %}" class="nav__link {% if request.path == '/Contrataciones_multi/' %}active{% endif %}">
-          <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
-          <span class="nav__name">Contrataciones</span>
-        </a>
-        {% endif %}
-      </div>
-    </div>
-  </nav>
+    </nav>
 </div>

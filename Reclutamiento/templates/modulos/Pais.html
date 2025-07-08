@@ -1,168 +1,201 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}
-  Paises
-{% endblock %}
-
+{% block title %}Paises{% endblock %}
 {% block content %}
-{% include 'menu.html' %}
-
-{% include 'cerrarsesion.html' %}
-
-  <div class="encabezado">
-    <form action="{% url 'paises' %}" method="GET">
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text"><ion-icon name="search-outline" style="font-size: 25px"></ion-icon></span>
-        </div>
-        <input type="text" class="form-control" placeholder="Buscar" name="search" value="{{ search }}" autocomplete="off" />
-      </div>
-    </form>
-    <h1 class="titulo-encabezado">Paises</h1>
-    {% if perms.Reclutamiento.add_pais %}
-    <button type="button" class="btn btn classbotones" data-bs-toggle="modal" data-bs-target="#modalregistro">Registrar Pais</button>
-    {% endif %}
-  </div>
-
-  <div class="tabla">
-    <table class="styled-table">
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>Pais</th>
-          <th>Estado</th>
-          {% if perms.Reclutamiento.change_pais %}
-          <th>Acciones</th>
-          {% endif %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in paises %}
-          <tr>
-            <td>{{ item.id }}</td>
-            <td>{{ item.nombre_pais }}</td>
-            <td>
-              {% if item.activo %}
-              <span style="color:green"><b>ACTIVO</b></span>
-              {% else %}
-              <span style="color:red"><b>INACTIVO</b></span>
-              {% endif %}
-            </td>
-            {% if perms.Reclutamiento.change_pais %}
-            <td>
-              <button type="button" class="btn classbotones" data-bs-toggle="modal" data-bs-target="#modaleditar" data-id="{{ item.id }}" onclick="llenarFormularioEditar(this)"><ion-icon name="create-outline" class="icon"></ion-icon></button>
-            </td>
-            {% endif %}
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <!-- Paginación -->
-    <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <!-- Botón "Anterior" -->
-            {% if paises.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ paises.previous_page_number }}&search={{ search }}&estado={{ estado }}">Anterior</a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">Anterior</span>
-                </li>
-            {% endif %}
-    
-            <!-- Mostrar un rango reducido de páginas -->
-            {% for num in page_range %}
-                {% if paises.number == num %}
-                    <li class="page-item active">
-                        <span class="page-link">{{ num }}</span>
+    {% include 'menu.html' %}
+    {% include 'cerrarsesion.html' %}
+    <div class="encabezado">
+        <form action="{% url 'paises' %}" method="GET">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><ion-icon name="search-outline" style="font-size: 25px"></ion-icon></span>
+                </div>
+                <input type="text"
+                       class="form-control"
+                       placeholder="Buscar"
+                       name="search"
+                       value="{{ search }}"
+                       autocomplete="off" />
+            </div>
+        </form>
+        <h1 class="titulo-encabezado">Paises</h1>
+        {% if perms.Reclutamiento.add_pais %}
+            <button type="button"
+                    class="btn btn classbotones"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalregistro">Registrar Pais</button>
+        {% endif %}
+    </div>
+    <div class="tabla">
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Pais</th>
+                    <th>Estado</th>
+                    {% if perms.Reclutamiento.change_pais %}<th>Acciones</th>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in paises %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.nombre_pais }}</td>
+                        <td>
+                            {% if item.activo %}
+                                <span style="color:green"><b>ACTIVO</b></span>
+                            {% else %}
+                                <span style="color:red"><b>INACTIVO</b></span>
+                            {% endif %}
+                        </td>
+                        {% if perms.Reclutamiento.change_pais %}
+                            <td>
+                                <button type="button"
+                                        class="btn classbotones"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modaleditar"
+                                        data-id="{{ item.id }}"
+                                        onclick="llenarFormularioEditar(this)">
+                                    <ion-icon name="create-outline" class="icon"></ion-icon>
+                                </button>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Paginación -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <!-- Botón "Anterior" -->
+                {% if paises.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ paises.previous_page_number }}&search={{ search }}&estado={{ estado }}">Anterior</a>
                     </li>
                 {% else %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ num }}&search={{ search }}&estado={{ estado }}">{{ num }}</a>
+                    <li class="page-item disabled">
+                        <span class="page-link">Anterior</span>
                     </li>
                 {% endif %}
-            {% endfor %}
-    
-            <!-- Botón "Siguiente" -->
-            {% if paises.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ paises.next_page_number }}&search={{ search }}&estado={{ estado }}">Siguiente</a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">Siguiente</span>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
+                <!-- Mostrar un rango reducido de páginas -->
+                {% for num in page_range %}
+                    {% if paises.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ num }}&search={{ search }}&estado={{ estado }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                <!-- Botón "Siguiente" -->
+                {% if paises.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ paises.next_page_number }}&search={{ search }}&estado={{ estado }}">Siguiente</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Siguiente</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
-  <br>
-
-  <div class="modal fade" id="modalregistro" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Registrar Pais</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <br>
+    <div class="modal fade"
+         id="modalregistro"
+         tabindex="-1"
+         aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Registrar Pais</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="register-form-pais" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="text"
+                                   name="nombre_pais"
+                                   id="nombre_pais"
+                                   class="form-control"
+                                   autocomplete="off"
+                                   placeholder="Nombre del Pais"
+                                   required />
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="estado">Estado</label>
+                            <select class="form-control" name="estado" id="estado" required>
+                                <option value="true">ACTIVO</option>
+                                <option value="false">INACTIVO</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn classbotones">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <form id="register-form-pais" enctype="multipart/form-data">
-            <div class="form-group">
-              <input type="text" name="nombre_pais" id="nombre_pais" class="form-control" autocomplete="off" placeholder="Nombre del Pais" required />
-            </div>
-            <br>
-            <div class="form-group">
-              <label for="estado">Estado</label>
-              <select class="form-control" name="estado" id="estado" required>
-                <option value="true">ACTIVO</option>
-                <option value="false">INACTIVO</option>
-              </select>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="submit" class="btn classbotones">Guardar</button>
-            </div>
-          </form>
-        </div>
-      </div>
     </div>
-  </div>
-
-  <div class="modal fade" id="modaleditar" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Editar Pais</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade"
+         id="modaleditar"
+         tabindex="-1"
+         aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Editar Pais</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-form-pais">
+                        <div class="form-group">
+                            <input type="text"
+                                   name="id_pais_editar"
+                                   id="id_pais_editar"
+                                   class="form-control"
+                                   disabled />
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <input type="text"
+                                   class="form-control"
+                                   id="nombre_pais_editar"
+                                   autocomplete="off"
+                                   name="nombre_pais_editar"
+                                   required />
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="estadoeditar">Estado</label>
+                            <select class="form-control" name="estadoeditar" id="estadoeditar" required>
+                                <option value="true">ACTIVO</option>
+                                <option value="false">INACTIVO</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn classbotones">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <form id="update-form-pais">
-            <div class="form-group">
-              <input type="text" name="id_pais_editar" id="id_pais_editar" class="form-control" disabled />
-            </div>
-            <br />
-            <div class="form-group">
-              <input type="text" class="form-control" id="nombre_pais_editar" autocomplete="off" name="nombre_pais_editar" required />
-            </div>
-            <br>
-            <div class="form-group">
-              <label for="estadoeditar">Estado</label>
-              <select class="form-control" name="estadoeditar" id="estadoeditar" required>
-                <option value="true">ACTIVO</option>
-                <option value="false">INACTIVO</option>
-              </select>
-            </div>            
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="submit" class="btn classbotones">Guardar</button>
-            </div>
-          </form>
-          
-        </div>
-      </div>
     </div>
-  </div>
-
-  <script src="{% static 'js/modulos/pais.js' %}"></script>
+    <script src="{% static 'js/modulos/pais.js' %}"></script>
 {% endblock %}

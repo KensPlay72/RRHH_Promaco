@@ -63,7 +63,6 @@ document.getElementById('register-form-user').addEventListener('submit', functio
 });
 
 
-
 function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== '') {

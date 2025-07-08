@@ -1,156 +1,153 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block title %}Dashboard{% endblock %}
-
 {% block content %}
-<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
-{% include 'menu.html' %}
-
-
-
-{% include 'cerrarsesion.html' %}
-
-
-<div class="linea1">
-    <div class="cuadros4">
-        <form method="GET" action="{% url 'dashboard' %}" style="margin-top:15px;">
-            <label for="empresa">Empresa:</label>
-            <select name="empresa" class="form-control" style="width: 80%;"  id="empresa">
-                <option value="">Seleccione</option>
-                {% for empresa in empresas %}
-                    <option value="{{ empresa.empresa__nombre_empresa }}"
-                        {% if request.GET.empresa == empresa.empresa__nombre_empresa %}selected{% endif %}>
-                        {{ empresa.empresa__nombre_empresa }}
-                    </option>
-                {% endfor %}
-            </select>
-    
-            <!-- Filtro de Año -->
-            <label for="año">Año:</label>
-            <select name="año" class="form-control" style="width: 80%;"  id="año">
-                <option value="">Seleccione</option>
-                {% for año in años %}
-                    <option value="{{ año.año }}"
-                        {% if request.GET.año == año.año|stringformat:"s" %}selected{% endif %}>
-                        {{ año.año }}
-                    </option>
-                {% endfor %}
-            </select>
-            <label for="mes_corte">Mes de Corte:</label>
-            <select name="mes_corte" class="form-control" style="width: 80%;" id="mes_corte">
-                <option value="">Seleccione</option>
-                {% for mes in meses_corte %}
-                    <option value="{{ mes.mes_corte }}"
-                        {% if request.GET.mes_corte == mes.mes_corte %}selected{% endif %}>
-                        {{ mes.mes_corte }}
-                    </option>
-                {% endfor %}
-            </select>
-    
-            <label for="sucursal">Sucursal:</label>
-            <select name="sucursal" class="form-control" style="width: 80%;" id="sucursal">
-                <option value="">Seleccione</option>
-                {% for sucursal in sucursales %}
-                    <option value="{{ sucursal.sucursal__nombre_sucursal }}"
-                        {% if request.GET.sucursal == sucursal.sucursal__nombre_sucursal %}selected{% endif %}>
-                        {{ sucursal.sucursal__nombre_sucursal }}
-                    </option>
-                {% endfor %}
-            </select>
-            <br>
-            <div class="botones">       
-                <button type="submit" class="btn btn classbotones">Aplicar</button>
-                <button type="button" class="btn btn-danger" onclick="window.location.href='{% url 'dashboard' %}'">Borrar</button>
-            </div>  
-    </form>
-      </div>
-  <div class="cuadros2">
-    <div class=""><p>PLAZAS CERRADAS VS PROCESO</p></div>
-    <div class="canvas1">
-        <canvas id="procesoCerradaChart"></canvas>
-    </div>
-  </div>
-
-  <div class="cuadros1">
-    <div class="icon">
-      <i class="fas fa-stopwatch"></i> <!-- Ícono con FontAwesome -->
-    </div>
-    <div class="info">
-      <h2> {% if promedio_tiempo_efectivo_cobertura %}
-        {{ promedio_tiempo_efectivo_cobertura|floatformat:0 }} días
-    {% else %}
-        No disponible
-    {% endif %}
-    </h2> <!-- Cantidad -->
-      <p>Promedio de Tiempo Efectivo de Cobertura</p> <!-- Título -->
-    </div>
-    <div class="waves">
-      <svg viewBox="0 0 100 40" preserveAspectRatio="none">
-        <path d="M0 25 Q 20 5, 40 25 T 80 25 T 100 15 V 40 H 0 Z" fill="#6C63FF" stroke="#6C63FF" stroke-width="2" />
-      </svg>            
-    </div>
-  </div>
-
-  <div class="cuadros1">
-    <div class="icon">
-      <i class="fas fa-user"></i> <!-- Ícono con FontAwesome -->
-    </div>
-    <div class="info">
-      <h2> {{ promedio_edad|floatformat:0 }}</h2>
-      <p>Promedio de Edad</p> <!-- Título -->
-    </div>
-    <div class="waves">
-        <svg viewBox="0 0 100 40" preserveAspectRatio="none">
-            <path d="M0 30 Q 10 25, 20 30 T 40 20 T 60 20 T 90 10 T 100 30 V 40 H 0 Z" fill="#efa019" stroke="#efa019" stroke-width="2" />
-        </svg>                       
-    </div>
-  </div>
-
-  <div class="cuadros1">
-    <div class="icon">
-      <i class="fas fa-users"></i> <!-- Ícono con FontAwesome -->
-    </div>
-    <div class="info">
-      <h4>Femenino: {{ total_femenino }}</h4>
-      <h4>Masculino: {{ total_masculino }}</h4>
-      <p>Plazas Cerradas por Género</p>
-    </div>
-    <div class="waves">
-        <svg viewBox="0 0 100 40" preserveAspectRatio="none">
-            <path d="M0 30 Q 10 25, 20 30 T 40 20 T 60 20 T 90 20 T 100 30 V 40 H 0 Z" fill="#07de54" stroke="#07de54" stroke-width="2" />
-          </svg>                                    
-    </div>
-  </div>
-
-</div>
-<br>
-  <div class="linea1">
-      <div class="cuadros">
-        <div class="canvas2">
-            <canvas id="estadoCandidatosChart"></canvas>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    {% include 'menu.html' %}
+    {% include 'cerrarsesion.html' %}
+    <div class="linea1">
+        <div class="cuadros4">
+            <form method="GET" action="{% url 'dashboard' %}" style="margin-top:15px;">
+                <label for="empresa">Empresa:</label>
+                <select name="empresa" class="form-control" style="width: 80%;"  id="empresa">
+                    <option value="">Seleccione</option>
+                    {% for empresa in empresas %}
+                        <option value="{{ empresa.empresa__nombre_empresa }}"
+                                {% if request.GET.empresa == empresa.empresa__nombre_empresa %}selected{% endif %}>
+                            {{ empresa.empresa__nombre_empresa }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <!-- Filtro de Año -->
+                <label for="año">Año:</label>
+                <select name="año" class="form-control" style="width: 80%;"  id="año">
+                    <option value="">Seleccione</option>
+                    {% for año in años %}
+                        <option value="{{ año.año }}"
+                                {% if request.GET.año == año.año|stringformat:"s" %}selected{% endif %}>
+                            {{ año.año }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <label for="mes_corte">Mes de Corte:</label>
+                <select name="mes_corte"
+                        class="form-control"
+                        style="width: 80%"
+                        id="mes_corte">
+                    <option value="">Seleccione</option>
+                    {% for mes in meses_corte %}
+                        <option value="{{ mes.mes_corte }}"
+                                {% if request.GET.mes_corte == mes.mes_corte %}selected{% endif %}>
+                            {{ mes.mes_corte }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <label for="sucursal">Sucursal:</label>
+                <select name="sucursal" class="form-control" style="width: 80%" id="sucursal">
+                    <option value="">Seleccione</option>
+                    {% for sucursal in sucursales %}
+                        <option value="{{ sucursal.sucursal__nombre_sucursal }}"
+                                {% if request.GET.sucursal == sucursal.sucursal__nombre_sucursal %}selected{% endif %}>
+                            {{ sucursal.sucursal__nombre_sucursal }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <br>
+                <div class="botones">
+                    <button type="submit" class="btn btn classbotones">Aplicar</button>
+                    <button type="button"
+                            class="btn btn-danger"
+                            onclick="window.location.href='{% url 'dashboard' %}'">Borrar</button>
+                </div>
+            </form>
         </div>
-      </div>
-      <div class="cuadros">
-        <div class=""><p>Estado de Pagos de Cesantías</p></div>
-        <div class="canvas1">
-            <canvas id="estadoPagoChart"></canvas>
+        <div class="cuadros2">
+            <div class="">
+                <p>PLAZAS CERRADAS VS PROCESO</p>
+            </div>
+            <div class="canvas1">
+                <canvas id="procesoCerradaChart"></canvas>
+            </div>
+        </div>
+        <div class="cuadros1">
+            <div class="icon">
+                <i class="fas fa-stopwatch"></i> <!-- Ícono con FontAwesome -->
+            </div>
+            <div class="info">
+                <h2>
+                    {% if promedio_tiempo_efectivo_cobertura %}
+                        {{ promedio_tiempo_efectivo_cobertura|floatformat:0 }} días
+                    {% else %}
+                        No disponible
+                    {% endif %}
+                </h2>
+                <!-- Cantidad -->
+                <p>Promedio de Tiempo Efectivo de Cobertura</p>
+                <!-- Título -->
+            </div>
+            <div class="waves">
+                <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                    <path d="M0 25 Q 20 5, 40 25 T 80 25 T 100 15 V 40 H 0 Z" fill="#6C63FF" stroke="#6C63FF" stroke-width="2" />
+                </svg>
+            </div>
+        </div>
+        <div class="cuadros1">
+            <div class="icon">
+                <i class="fas fa-user"></i> <!-- Ícono con FontAwesome -->
+            </div>
+            <div class="info">
+                <h2>{{ promedio_edad|floatformat:0 }}</h2>
+                <p>Promedio de Edad</p>
+                <!-- Título -->
+            </div>
+            <div class="waves">
+                <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                    <path d="M0 30 Q 10 25, 20 30 T 40 20 T 60 20 T 90 10 T 100 30 V 40 H 0 Z" fill="#efa019" stroke="#efa019" stroke-width="2" />
+                </svg>
+            </div>
+        </div>
+        <div class="cuadros1">
+            <div class="icon">
+                <i class="fas fa-users"></i> <!-- Ícono con FontAwesome -->
+            </div>
+            <div class="info">
+                <h4>Femenino: {{ total_femenino }}</h4>
+                <h4>Masculino: {{ total_masculino }}</h4>
+                <p>Plazas Cerradas por Género</p>
+            </div>
+            <div class="waves">
+                <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                    <path d="M0 30 Q 10 25, 20 30 T 40 20 T 60 20 T 90 20 T 100 30 V 40 H 0 Z" fill="#07de54" stroke="#07de54" stroke-width="2" />
+                </svg>
+            </div>
         </div>
     </div>
-    <div class="cuadros">
-        <h2 id="monthName"></h2> <!-- Título para el mes -->
-        <div id="calendar"></div>
+    <br>
+    <div class="linea1">
+        <div class="cuadros">
+            <div class="canvas2">
+                <canvas id="estadoCandidatosChart"></canvas>
+            </div>
+        </div>
+        <div class="cuadros">
+            <div class="">
+                <p>Estado de Pagos de Cesantías</p>
+            </div>
+            <div class="canvas1">
+                <canvas id="estadoPagoChart"></canvas>
+            </div>
+        </div>
+        <div class="cuadros">
+            <h2 id="monthName"></h2>
+            <!-- Título para el mes -->
+            <div id="calendar"></div>
+        </div>
     </div>
-
-  </div>
-
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dayjs@1/locale/es.js"></script>
-
 <script>
   document.addEventListener('DOMContentLoaded', function () {
       // Configurar Day.js para usar el idioma español
@@ -259,8 +256,7 @@
       // Generar el calendario para el mes actual
       generateCalendar(currentMonth, currentYear, currentDay, currentMonth, currentYear);
   });
-  </script>
-  
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Gráfica: Solo En Proceso y Cerradas
@@ -393,5 +389,4 @@
     
     
 </script>
-
 {% endblock %}

@@ -184,7 +184,6 @@ document.addEventListener('DOMContentLoaded', function() {
     formData.append('segundoApellido', getFieldValue('segundoApellido'));
     formData.append('fechaNacimiento', getFieldValue('fechaNacimiento'));
     formData.append('municipio', getFieldValue('municipio'));
-    formData.append('pais', getFieldValue('pais'));
     formData.append('genero', document.querySelector('input[name="genero"]:checked') ? document.querySelector('input[name="genero"]:checked').value : null);
     formData.append('direccion', getFieldValue('direccion'));
     formData.append('cedula', getFieldValue('cedula'));
@@ -192,7 +191,6 @@ document.addEventListener('DOMContentLoaded', function() {
     formData.append('hijos', document.getElementById('hijos').checked ? 1 : 0);
     formData.append('profesion', getFieldValue('profesion'));
     formData.append('correo', getFieldValue('correo'));
-    formData.append('departamento', getFieldValue('departamento'));
     formData.append('telefono', getFieldValue('telefono'));
 
     // Datos de emergencia
@@ -338,9 +336,7 @@ document.addEventListener('DOMContentLoaded', function () {
             formData.append('hijos', document.getElementById('hijos').checked ? 1 : 0);
             formData.append('profesion', getFieldValue('profesion'));
             formData.append('correo', getFieldValue('correo'));
-            formData.append('departamento', getFieldValue('departamento'));
             formData.append('telefono', getFieldValue('telefono'));
-            formData.append('pais', getFieldValue('pais'));
 
             // Datos de emergencia
             formData.append('emergencia1', getFieldValue('emergencia1'));
@@ -438,7 +434,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 function mostrardetalles(boton) {
-    // Obtener el ID de la contratación a partir del atributo data-id del botón
     var id = boton.getAttribute('data-id');
 
     // Parsear el contenido del script JSON

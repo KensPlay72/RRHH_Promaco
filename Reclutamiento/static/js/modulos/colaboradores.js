@@ -10,7 +10,9 @@ document.getElementById('register-form-colaborador').addEventListener('submit', 
         departamento: document.getElementById('departamento').value,
         jefes: document.getElementById('jefes').value,
         estado: document.getElementById('estado').value === "true",
-        codigocolaborador: document.getElementById('codigocolaborador').value
+        codigocolaborador: document.getElementById('codigocolaborador').value,
+        dni: document.getElementById('dni').value,
+        puesto: document.getElementById('puesto').value,
     };
 
     fetch('/Listas/Colaboradores/', {
@@ -77,6 +79,10 @@ function getCookie(name) {
 const csrftoken = getCookie('csrftoken');
 
 
+function validateNumber(input) {
+    input.value = input.value.replace(/[^0-9.+]/g, '');
+}
+
 function llenarFormularioEditar(boton) {
 
     const colaborador_id = boton.getAttribute('data-id');
@@ -85,16 +91,17 @@ function llenarFormularioEditar(boton) {
         .then(response => response.json())
         .then(data => {
             const datos = data.colaborador;
-            console.log(datos);
             document.getElementById('idcolaborador').value = datos.id;
             document.getElementById('nombrecolaboradoreditar').value = datos.nombrecolaborador;
             document.getElementById('codigocolaboradoreditar').value = datos.codigocolaborador;
             document.getElementById('sucursaleditar').value = datos.sucursal_id;
             document.getElementById('empresaeditar').value = datos.empresa_id;
+            document.getElementById('dniedit').value = datos.dni;
             document.getElementById('unidadnegocioeditar').value = datos.unidad_de_negocio_id;
             document.getElementById('departamentoeditar').value = datos.departamento_id;
             document.getElementById('jefeseditar').value = datos.jefe_id;
             document.getElementById('estadoeditar').value = datos.activo ? "true" : "false";
+            document.getElementById('puestoedit').value = datos.puesto;
         }).catch(error => console.error('Error al cargar los datos del usuario:', error));
 }
 
@@ -111,9 +118,10 @@ document.getElementById('update-form-colaboradores').addEventListener('submit', 
         departamento: document.getElementById('departamentoeditar').value,
         jefes: document.getElementById('jefeseditar').value,
         estado: document.getElementById('estadoeditar').value === "true",
-        codigocolaborador: document.getElementById('codigocolaboradoreditar').value
+        codigocolaborador: document.getElementById('codigocolaboradoreditar').value,
+        dniedit: document.getElementById('dniedit').value,
+        puesto: document.getElementById('puestoedit').value,
     };
-    console.log(data);
 
     fetch('/Listas/Colaboradores/', {
         method: 'PUT',

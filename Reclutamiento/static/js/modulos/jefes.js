@@ -6,7 +6,12 @@ document.getElementById('register-form-jefes').addEventListener('submit', functi
         codigo: document.getElementById('codigo').value,
         nombrejefe: document.getElementById('nombrejefe').value,
         estado: document.getElementById('estado').value === 'true',
-        identidadjefe : document.getElementById('identidadjefe').value
+        identidadjefe : document.getElementById('identidadjefe').value,
+        sucursal: document.getElementById('sucursal').value,
+        empresa: document.getElementById('empresa').value,
+        unidadnegocio: document.getElementById('unidadnegocio').value,
+        departamento: document.getElementById('departamento').value,
+        puesto: document.getElementById('puesto').value
     };
 
     if (codigo.length > 20) {
@@ -71,7 +76,7 @@ document.getElementById('register-form-jefes').addEventListener('submit', functi
 
 function validateNumber(input) {
     input.value = input.value.replace(/[^0-9.+]/g, '');
-  }
+}
 
 
 function getCookie(name) {
@@ -105,7 +110,13 @@ function llenarFormularioEditar(boton) {
         document.getElementById('identidadjefeditar').value = datos.identidadjefe;   
         document.getElementById('codigoeditar').value = datos.codigo;
         document.getElementById('nombrejefeeditar').value = datos.nombrejefe;
-        document.getElementById('estadoeditar').value = ciudades.activo ? "true" : "false";
+        document.getElementById('estadoeditar').value = datos.activo ? "true" : "false";
+        document.getElementById('sucursaledit').value = datos.sucursal;
+        document.getElementById('empresaedit').value = datos.empresa;
+        document.getElementById('unidadnegocioedit').value = datos.unidadnegocio;
+        document.getElementById('departamentoedit').value = datos.departamento;
+        document.getElementById('puestoedit').value = datos.puesto;
+
     }).catch(error => console.error('Error al cargar los datos del usuario:', error));
 }
 
@@ -118,7 +129,12 @@ document.getElementById('update-form-jefes').addEventListener('submit', function
         codigo : document.getElementById('codigoeditar').value,
         nombrejefe : document.getElementById('nombrejefeeditar').value,
         estado : document.getElementById('estadoeditar').value === 'true',
-        identidadjefe : document.getElementById('identidadjefeditar').value
+        identidadjefe : document.getElementById('identidadjefeditar').value,
+        sucursal: document.getElementById('sucursaledit').value,
+        empresa: document.getElementById('empresaedit').value,
+        unidadnegocio: document.getElementById('unidadnegocioedit').value,
+        departamento: document.getElementById('departamentoedit').value,
+        puesto: document.getElementById('puestoedit').value,
     };
 
     fetch('/Listas/Jefes/', {

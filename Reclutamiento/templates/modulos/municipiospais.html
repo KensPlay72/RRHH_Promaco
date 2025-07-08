@@ -1,190 +1,224 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}
-  Municipios
-{% endblock %}
-
+{% block title %}Municipios{% endblock %}
 {% block content %}
-{% include 'menu.html' %}
-
-{% include 'cerrarsesion.html' %}
-
-  <div class="encabezado">
-    <form action="{% url 'municipiopais' %}" method="GET">
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <span class="input-group-text"><ion-icon name="search-outline" style="font-size: 25px"></ion-icon></span>
-        </div>
-        <input type="text" class="form-control" placeholder="Buscar" name="search" value="{{ search }}" autocomplete="off" />
-      </div>
-    </form>
-    <h1 class="titulo-encabezado">Municipios</h1>
-    {% if perms.Reclutamiento.add_pais %}
-    <button type="button" class="btn btn classbotones" data-bs-toggle="modal" data-bs-target="#modalregistro">Registrar Municipio</button>
-    {% endif %}
-  </div>
-
-  <div class="tabla">
-    <table class="styled-table">
-      <thead>
-        <tr>
-          <th>Id</th>
-          <th>Municipio</th>
-          <th>Departamento</th>
-          <th>Estado</th>
-          {% if perms.Reclutamiento.change_pais %}
-          <th>Acciones</th>
-          {% endif %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for item in municipios %}
-          <tr>
-            <td>{{ item.id }}</td>
-            <td>{{ item.nombre_municipio }}</td>
-            <td>{{ item.departamento.nombre_departamento }}</td>
-            <td>
-              {% if item.activo %}
-              <span style="color:green"><b>ACTIVO</b></span>
-              {% else %}
-              <span style="color:red"><b>INACTIVO</b></span>
-              {% endif %}
-            </td>
-            {% if perms.Reclutamiento.change_pais %}
-            <td>
-              <button type="button" class="btn classbotones" data-bs-toggle="modal" data-bs-target="#modaleditar" data-id="{{ item.id }}" onclick="llenarFormularioEditar(this)"><ion-icon name="create-outline" class="icon"></ion-icon></button>
-            </td>
-            {% endif %}
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-    <!-- Paginación -->
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-            <!-- Botón "Anterior" -->
-            {% if municipios.has_previous %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ municipios.previous_page_number }}&search={{ search }}">Anterior</a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">Anterior</span>
-                </li>
-            {% endif %}
-    
-            <!-- Mostrar un rango reducido de páginas -->
-            {% for num in page_range %}
-                {% if municipios.number == num %}
-                    <li class="page-item active">
-                        <span class="page-link">{{ num }}</span>
+    {% include 'menu.html' %}
+    {% include 'cerrarsesion.html' %}
+    <div class="encabezado">
+        <form action="{% url 'municipiopais' %}" method="GET">
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><ion-icon name="search-outline" style="font-size: 25px"></ion-icon></span>
+                </div>
+                <input type="text"
+                       class="form-control"
+                       placeholder="Buscar"
+                       name="search"
+                       value="{{ search }}"
+                       autocomplete="off" />
+            </div>
+        </form>
+        <h1 class="titulo-encabezado">Municipios</h1>
+        {% if perms.Reclutamiento.add_pais %}
+            <button type="button"
+                    class="btn btn classbotones"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalregistro">Registrar Municipio</button>
+        {% endif %}
+    </div>
+    <div class="tabla">
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Municipio</th>
+                    <th>Departamento</th>
+                    <th>Estado</th>
+                    {% if perms.Reclutamiento.change_pais %}<th>Acciones</th>{% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in municipios %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.nombre_municipio }}</td>
+                        <td>{{ item.departamento.nombre_departamento }}</td>
+                        <td>
+                            {% if item.activo %}
+                                <span style="color:green"><b>ACTIVO</b></span>
+                            {% else %}
+                                <span style="color:red"><b>INACTIVO</b></span>
+                            {% endif %}
+                        </td>
+                        {% if perms.Reclutamiento.change_pais %}
+                            <td>
+                                <button type="button"
+                                        class="btn classbotones"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modaleditar"
+                                        data-id="{{ item.id }}"
+                                        onclick="llenarFormularioEditar(this)">
+                                    <ion-icon name="create-outline" class="icon"></ion-icon>
+                                </button>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!-- Paginación -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <!-- Botón "Anterior" -->
+                {% if municipios.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ municipios.previous_page_number }}&search={{ search }}">Anterior</a>
                     </li>
                 {% else %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ num }}&search={{ search }}">{{ num }}</a>
+                    <li class="page-item disabled">
+                        <span class="page-link">Anterior</span>
                     </li>
                 {% endif %}
-            {% endfor %}
-    
-            <!-- Botón "Siguiente" -->
-            {% if municipios.has_next %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ municipios.next_page_number }}&search={{ search }}">Siguiente</a>
-                </li>
-            {% else %}
-                <li class="page-item disabled">
-                    <span class="page-link">Siguiente</span>
-                </li>
-            {% endif %}
-        </ul>
-    </nav>
-      </div>
-  <br>
-
-  <div class="modal fade" id="modalregistro" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Registrar Municipio</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="register-form-municipiopais" enctype="multipart/form-data">
-            <div class="form-group">
-              <input type="text" name="nombre_municipio" id="nombre_municipio" class="form-control" autocomplete="off" placeholder="Nombre del Municipio" required />
-            </div>
-            <br>
-            <div class="form-group">
-                <label for="Departamento">Departamento</label>
-                <select class="form-control" name="departamentopais" id="departamentopais" required>
-                  <option value="" selected disabled>Seleccione un departamento</option>
-                  {% for item in departamentos %}
-                    <option value="{{ item.id }}">{{ item.nombre_departamento }}</option>
-                  {% endfor %}
-                </select>
-            </div>  
-            <br>
-            <div class="form-group">
-              <label for="estado">Estado</label>
-              <select class="form-control" name="estado" id="estado" required>
-                <option value="true">ACTIVO</option>
-                <option value="false">INACTIVO</option>
-              </select>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="submit" class="btn classbotones">Guardar</button>
-            </div>
-          </form>
-        </div>
-      </div>
+                <!-- Mostrar un rango reducido de páginas -->
+                {% for num in page_range %}
+                    {% if municipios.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                    {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}&search={{ search }}">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                <!-- Botón "Siguiente" -->
+                {% if municipios.has_next %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="?page={{ municipios.next_page_number }}&search={{ search }}">Siguiente</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Siguiente</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
-  </div>
-
-  <div class="modal fade" id="modaleditar" tabindex="-1" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Editar Municipio</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <br>
+    <div class="modal fade"
+         id="modalregistro"
+         tabindex="-1"
+         aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Registrar Municipio</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="register-form-municipiopais" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="text"
+                                   name="nombre_municipio"
+                                   id="nombre_municipio"
+                                   class="form-control"
+                                   autocomplete="off"
+                                   placeholder="Nombre del Municipio"
+                                   required />
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="Departamento">Departamento</label>
+                            <select class="form-control"
+                                    name="departamentopais"
+                                    id="departamentopais"
+                                    required>
+                                <option value="" selected disabled>Seleccione un departamento</option>
+                                {% for item in departamentos %}<option value="{{ item.id }}">{{ item.nombre_departamento }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="estado">Estado</label>
+                            <select class="form-control" name="estado" id="estado" required>
+                                <option value="true">ACTIVO</option>
+                                <option value="false">INACTIVO</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn classbotones">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          <form id="update-form-departamentopais">
-            <div class="form-group">
-              <input type="text" name="id_municipiopais_editar" id="id_municipiopais_editar" class="form-control" disabled />
-            </div>
-            <br />
-            <div class="form-group">
-              <input type="text" class="form-control" id="nombre_municipio_editar" autocomplete="off" name="nombre_municipio_editar" required />
-            </div>
-            <br>
-            <div class="form-group">
-                <label for="Departamento">Departamento</label>
-                <select class="form-control" name="departamentopais_editar" id="departamentopais_editar" required>
-                  <option value="" selected disabled>Seleccione un departamento</option>
-                  {% for item in departamentos %}
-                    <option value="{{ item.id }}">{{ item.nombre_departamento }}</option>
-                  {% endfor %}
-                </select>
-            </div>  
-            <br>
-            <div class="form-group">
-              <label for="estadoeditar">Estado</label>
-              <select class="form-control" name="estadoeditar" id="estadoeditar" required>
-                <option value="true">ACTIVO</option>
-                <option value="false">INACTIVO</option>
-              </select>
-            </div>            
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-              <button type="submit" class="btn classbotones">Guardar</button>
-            </div>
-          </form>
-          
-        </div>
-      </div>
     </div>
-  </div>
-
-  <script src="{% static 'js/modulos/municipiospais.js' %}"></script>
+    <div class="modal fade"
+         id="modaleditar"
+         tabindex="-1"
+         aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Editar Municipio</h5>
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-form-departamentopais">
+                        <div class="form-group">
+                            <input type="text"
+                                   name="id_municipiopais_editar"
+                                   id="id_municipiopais_editar"
+                                   class="form-control"
+                                   disabled />
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <input type="text"
+                                   class="form-control"
+                                   id="nombre_municipio_editar"
+                                   autocomplete="off"
+                                   name="nombre_municipio_editar"
+                                   required />
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="Departamento">Departamento</label>
+                            <select class="form-control"
+                                    name="departamentopais_editar"
+                                    id="departamentopais_editar"
+                                    required>
+                                <option value="" selected disabled>Seleccione un departamento</option>
+                                {% for item in departamentos %}<option value="{{ item.id }}">{{ item.nombre_departamento }}</option>{% endfor %}
+                            </select>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="estadoeditar">Estado</label>
+                            <select class="form-control" name="estadoeditar" id="estadoeditar" required>
+                                <option value="true">ACTIVO</option>
+                                <option value="false">INACTIVO</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn classbotones">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/modulos/municipiospais.js' %}"></script>
 {% endblock %}

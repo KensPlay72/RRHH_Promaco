@@ -331,16 +331,12 @@ function validateNumber(input) {
 
 
 function mostrardetalles(boton) {
-    // Obtener el ID de la contratación a partir del atributo data-id del botón
     var id = boton.getAttribute('data-id');
 
-    // Parsear el contenido del script JSON
     var contratacionesData = JSON.parse(document.getElementById('contrataciones-data').textContent);
 
-    // Buscar el item correspondiente en el array
     var datosContratacion = contratacionesData.find(item => item.id == id);
 
-    // Función para establecer el texto
     function setInnerText(id, value) {
         var element = document.getElementById(id);
         if (element) {
